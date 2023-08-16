@@ -1,0 +1,116 @@
+{% extends 'produtos/base.html' %}
+
+{% block body %}
+
+<h3 class="m-4">Todos os Produtos</h3>
+        <div class="row">
+            <div class="col-12">
+                {% if produtos %}
+                <div class="card bg-light ms-4 me-4 mb-4">
+                    <div class="card-header">
+                        <i class="fa-solid fa-list-check fa-lg"></i> Registros de produtos
+                    </div>
+                    <div class="card-body">
+                      <p class="card-text">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">Número do Produto</th>
+                                    <th scope="col">Nome</th>
+                                    <th scope="col">Marca</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Categoria</th>
+                                    <th scope="col">Quantidade</th>
+                                    <th scope="col">Ações</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {% for produto in produtos %}
+                                  <tr>
+                                    <td>{{ produto.numero_produto }}</td>
+                                    <td>{{ produto.nome_produto }}</td>
+                                    <td>{{ produto.marca }}</td>
+                                    <td>{{ produto.email }}</td>
+                                    <td>{{ produto.category }}</td>
+                                    <td>{{ produto.quantidade }}</td>
+                                    <td>
+                                      <button type="button" class="btn btn-success me-1" href="{% url 'view_produto' produto.id %}" data-bs-toggle="modal" data-bs-target="#myModal{{produto.id}}">
+                                        <i class="fa-solid fa-circle-info fa-lg"></i>
+                                      </button>
+
+                                      <!--Modal - View Produto-->
+                                      <div class="modal" id="myModal{{produto.id}}" tabindex="-1" aria-labelledby="myModalLabel1" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                              <h5 class="modal-title">
+                                                Produto: {{ produto.nome_produto }} {{ produto.marca }}
+                                              </h5>
+                                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true"></span>
+                                              </button>
+                                            </div>
+                                            <div class="modal-body">
+                                              <ul class="list-unstyled">
+                                                <li>Numero do Produto: <strong>{{ produto.numero_produto }}</strong></li>
+                                                <li>Nome: <strong>{{ produto.nome_produto }}</strong></li>
+                                                <li>Marca: <strong>{{ produto.marca }}</strong></li>
+                                                <li>Email: <strong>{{ produto.email }}</strong></li>
+                                                <li>Category: <strong>{{ produto.category }}</strong></li>
+                                                <li>Quantidade: <strong>{{ produto.quantidade }}</strong></li>
+                                              </ul>
+                                            </div>
+                                            <div class="modal-footer">
+                                              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <a class="btn btn-warning me-1" href="{% url 'edit' produto.id %}">
+                                        <i class="fa-solid fa-pen-to-square fa-lg"></i>
+                                      </a>
+                                      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{produto.id}}">
+                                        <i class="fa-solid fa-trash-can fa-lg"></i>
+                                      </button>
+
+                                      <!--Modal - Delete Produto -->
+                                      <div class="modal" id="delete{{produto.id}}" tabindex="-1" aria-labelledby="myModalLabel2" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                              <h5 class="modal-title">
+                                                Produto: {{ produto.nome_produto }} {{ produto.marca }}
+                                              </h5>
+                                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true"></span>
+                                              </button>
+                                            </div>
+                                            <div class="modal-body">
+                                              <p>Você tem certeza de que quer apagar esse produto?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                              <form action="{% url 'delete' produto.id %}" method="POST">
+                                                {% csrf_token %}
+                                                <input type="submit" class="btn btn-primary" value="Delete">
+                                              </form>
+                                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  {% endfor %}
+                                </tbody>
+                              </table>
+                        </div>
+                      </p>
+                    </div>
+                  </div>
+                {% else %}
+                    <h5 class="alert alert-primary ms-4 me-4">Nenhum Registro de Produto</h5>
+                {% endif %}
+            </div>
+        </div>
+{% endblock  %}
